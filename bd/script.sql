@@ -1,11 +1,10 @@
-CREATE TABLE client_type
+CREATE TABLE person_type
 (
     id SERIAL PRIMARY KEY,
     type_name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Insert types into clientType table
-INSERT INTO client_type (type_name) VALUES ('customer'), ('supplier');
+INSERT INTO person_type (type_name) VALUES ('customer'), ('supplier');
 
 -- Create person table
 CREATE TABLE person
@@ -15,7 +14,7 @@ CREATE TABLE person
     email     VARCHAR(100) UNIQUE,
     phone     VARCHAR(20),
     type_id   INTEGER NOT NULL,
-    FOREIGN KEY (type_id) REFERENCES client_type (id) ON DELETE CASCADE
+    FOREIGN KEY (type_id) REFERENCES person_type (id) ON DELETE CASCADE
 );
 
 -- Create parts table
