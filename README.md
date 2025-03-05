@@ -1,5 +1,8 @@
 # ciid-test-java
-https://sonarcloud.io/project/overview?id=ChuritMaklan_ciid-test-java
-Task Estimated time Real time
-1     3              5
-2     8              8 
+https://sonarcloud.io/project/overview?id=ChuritMaklan_ciid-test-java <br>
+Task 1 <br>
+Estimated time: 3 <br>
+Real time: 5 <br>
+Task 2 <br>
+Estimated time: 8 <br>
+Real time: 8 <br>
