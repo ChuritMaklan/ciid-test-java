@@ -2,15 +2,12 @@ package com.example.ciidtestspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -25,7 +22,6 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     @JsonBackReference
     @JsonIgnore
-   // Marks this side as the "managed" side
     private Set<Part> parts;
     public Set<Part> getParts() {
         return new HashSet<>(parts); // Returns a copy of the collection

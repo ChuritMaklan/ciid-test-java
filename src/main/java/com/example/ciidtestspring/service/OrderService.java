@@ -1,4 +1,5 @@
 package com.example.ciidtestspring.service;
+import com.example.ciidtestspring.PersonTypeEnum;
 import com.example.ciidtestspring.dto.OrderItemRequest;
 import com.example.ciidtestspring.dto.OrderRequest;
 import com.example.ciidtestspring.entity.Order;
@@ -12,34 +13,58 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service
 public class OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private PartRepository partRepository;
-    @Autowired
-    private PersonRepository personRepository;
-    @Autowired
-    private  PersonTypeService personTypeService;
+    private final OrderRepository orderRepository;
+    private final PartRepository partRepository;
+    private final PersonRepository personRepository;
+    private final PersonTypeService personTypeService;
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public OrderService(OrderRepository orderRepository, PartRepository partRepository, PersonRepository personRepository, PersonTypeService personTypeService) {
+        this.orderRepository = orderRepository;
+        this.partRepository = partRepository;
+        this.personRepository = personRepository;
+        this.personTypeService = personTypeService;
     }
 
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+    public List<OrderRequest> getAllOrders() {
+        List<OrderRequest> orderRequests = new ArrayList<>();
+        List<Order> orders =  orderRepository.findAll();
+        for(Order order: orders){
+            orderRequests.add(orderToOrderRequest(order));
+        }
+        return orderRequests;
+    }
+
+    public OrderRequest getOrderById(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        return orderToOrderRequest(order);
+    }
+    private OrderRequest orderToOrderRequest(Order order){
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setId(order.getId());
+        orderRequest.setPersonId(order.getPerson().getId());
+        orderRequest.setOrderDate(order.getOrderDate());
+        Set<OrderItemRequest> orderItemRequests = new HashSet<>();
+        Set<OrderItem> orderItems = order.getOrderItems();
+        for(OrderItem orderItem : orderItems){
+            OrderItemRequest orderItemRequest = new OrderItemRequest();
+            orderItemRequest.setId(orderItem.getId());
+            orderItemRequest.setPrice(orderItem.getPrice());
+            orderItemRequest.setQuantity(orderItem.getQuantity());
+            orderItemRequest.setPartId(orderItem.getPart().getId());
+            orderItemRequests.add(orderItemRequest);
+        }
+        orderRequest.setOrderItems(orderItemRequests);
+        return orderRequest;
     }
 
     public Order createOrder(OrderRequest orderRequest) {
-        if (!personTypeService.checkIfCustomer(orderRequest.getPersonId())){
+        if (orderRequest.getPersonId() == PersonTypeEnum.CUSTOMER.getId()){
             return null;
         }
         Order order = new Order();
@@ -65,10 +90,11 @@ public class OrderService {
     }
 
     @Transactional
-    public Order updateOrder(Long orderId, OrderRequest orderRequest) {
-        if (!personTypeService.checkIfCustomer(orderRequest.getPersonId())){
+    public Order updateOrder(OrderRequest orderRequest) {
+        if (orderRequest.getPersonId() == PersonTypeEnum.CUSTOMER.getId()){
             return null;
         }
+        Long orderId = orderRequest.getId();
         Order existingOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
         existingOrder.setOrderDate(orderRequest.getOrderDate());

@@ -1,25 +1,29 @@
 package com.example.ciidtestspring.controller;
 
+import com.example.ciidtestspring.dto.PersonTypeRequest;
 import com.example.ciidtestspring.entity.PersonType;
 import com.example.ciidtestspring.service.PersonTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/person-types")
+@CrossOrigin
 public class PersonTypeController {
-    @Autowired
-    private PersonTypeService personTypeService;
+    private final PersonTypeService personTypeService;
+
+    public PersonTypeController(PersonTypeService personTypeService) {
+        this.personTypeService = personTypeService;
+    }
 
     @GetMapping
-    public List<PersonType> getAllPersonTypes() {
+    public List<PersonTypeRequest> getAllPersonTypes() {
         return personTypeService.getAllPersonTypes();
     }
 
     @GetMapping("/{id}")
-    public PersonType getPersonTypeById(@PathVariable Long id) {
+    public PersonTypeRequest getPersonTypeById(@PathVariable Long id) {
         return personTypeService.getPersonTypeById(id);
     }
 
@@ -29,8 +33,8 @@ public class PersonTypeController {
     }
 
     @PutMapping("/{id}")
-    public PersonType updatePersonType(@PathVariable Long id, @RequestBody PersonType personType) {
-        return personTypeService.updatePersonType(id, personType);
+    public PersonType updatePersonType(@RequestBody PersonTypeRequest personTypeRequest) {
+        return personTypeService.updatePersonType(personTypeRequest);
     }
 
     @DeleteMapping("/{id}")

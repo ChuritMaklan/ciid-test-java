@@ -1,29 +1,46 @@
 package com.example.ciidtestspring.service;
 
 import com.example.ciidtestspring.dto.PersonRequest;
-import com.example.ciidtestspring.entity.Part;
 import com.example.ciidtestspring.entity.Person;
 import com.example.ciidtestspring.entity.PersonType;
 import com.example.ciidtestspring.repository.PersonRepository;
 import com.example.ciidtestspring.repository.PersonTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PersonService {
-    @Autowired
-    private PersonRepository personRepository;
-    @Autowired
-    private PersonTypeRepository personTypeRepository;
+    private final PersonRepository personRepository;
+    private final PersonTypeRepository personTypeRepository;
 
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
+    public PersonService(PersonRepository personRepository, PersonTypeRepository personTypeRepository) {
+        this.personRepository = personRepository;
+        this.personTypeRepository = personTypeRepository;
     }
 
-    public Person getPersonById(Long id) {
-        return personRepository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+    public List<PersonRequest> getAllPersons() {
+        List<Person> persons = personRepository.findAll();
+        List<PersonRequest> personRequests = new ArrayList<>();
+        for(Person person: persons){
+            personRequests.add(personToPersonRequest(person));
+        }
+        return personRequests;
+    }
+
+    public PersonRequest getPersonById(Long id) {
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+        return personToPersonRequest(person);
+    }
+    private PersonRequest personToPersonRequest(Person person){
+        PersonRequest personRequest = new PersonRequest();
+        personRequest.setId(person.getId());
+        personRequest.setName(person.getName());
+        personRequest.setEmail(person.getEmail());
+        personRequest.setPhone(person.getPhone());
+        personRequest.setTypeId(person.getType().getId());
+        return personRequest;
     }
 
     public Person createPerson(PersonRequest personRequest) {
@@ -37,8 +54,8 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public Person updatePerson(Long id, PersonRequest updatedPerson) {
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("Person not found"));
+    public Person updatePerson(PersonRequest updatedPerson) {
+        Person person = personRepository.findById(updatedPerson.getId()).orElseThrow(() -> new RuntimeException("Person not found"));
         person.setName(updatedPerson.getName());
         person.setEmail(updatedPerson.getEmail());
         person.setPhone(updatedPerson.getPhone());

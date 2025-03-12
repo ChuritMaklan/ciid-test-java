@@ -13,31 +13,34 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/orders")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping
-    public List<Order> getAllOrders() {
+    public List<OrderRequest> getAllOrders() {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable Long id) {
+    public OrderRequest getOrderById(@PathVariable Long id) {
         return orderService.getOrderById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest) {
+    public OrderRequest createOrder(@RequestBody OrderRequest orderRequest) {
         Order createdOrder = orderService.createOrder(orderRequest);
-        return ResponseEntity.status(createdOrder == null ? HttpStatus.BAD_REQUEST: HttpStatus.CREATED).body(createdOrder);
-
+        return orderRequest;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody OrderRequest orderRequest) {
-        Order updatedOrder = orderService.updateOrder(id, orderRequest);
+    public ResponseEntity<Order> updateOrder(@RequestBody OrderRequest orderRequest) {
+        Order updatedOrder = orderService.updateOrder(orderRequest);
         return ResponseEntity.status(updatedOrder == null ? HttpStatus.BAD_REQUEST: HttpStatus.CREATED).body(updatedOrder);
     }
 

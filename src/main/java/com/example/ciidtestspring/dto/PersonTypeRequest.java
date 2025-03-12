@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderItemRequest {
+public class PersonTypeRequest {
     private long id;
-    private long partId;
-    private int quantity;
-    private int price;
+    private String typeName;
 }

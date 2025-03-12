@@ -1,5 +1,6 @@
 package com.example.ciidtestspring.controller;
 
+import com.example.ciidtestspring.dto.CategoryRequest;
 import com.example.ciidtestspring.entity.Category;
 import com.example.ciidtestspring.service.CategoryService;
 import com.example.ciidtestspring.service.PartService;
@@ -9,48 +10,53 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/categories")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired
-    private PartService partService;
+    private final PartService partService;
+
+    public CategoryController(CategoryService categoryService, PartService partService) {
+        this.categoryService = categoryService;
+        this.partService = partService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public List<CategoryRequest> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        List<CategoryRequest> categoryRequests = new ArrayList<>();
+        for(Category category: categories){
+            categoryRequests.add(categoryToCategoryRequest(category));
+        }
+        return categoryRequests;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
-        if (category == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return ResponseEntity.ok(category);
+    public CategoryRequest getCategoryById(@PathVariable Long id) {
+        return categoryToCategoryRequest(categoryService.getCategoryById(id));
+    }
+    private CategoryRequest categoryToCategoryRequest(Category category){
+        CategoryRequest categoryRequest = new CategoryRequest();
+        categoryRequest.setId(category.getId());
+        categoryRequest.setName(category.getName());
+        return categoryRequest;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        if (category.getName() == null || category.getName().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
         Category createdCategory = categoryService.createCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        if (category.getName() == null || category.getName().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        Category updatedCategory = categoryService.updateCategory(id, category);
+    public ResponseEntity<Category> updateCategory(@RequestBody CategoryRequest categoryRequest) {
+        Category updatedCategory = categoryService.updateCategory(categoryRequest);
         if (updatedCategory == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -65,9 +71,6 @@ public class CategoryController {
     @GetMapping("/{id}/parts")
     public ResponseEntity<List<Long>> getPartsByCategoryId(@PathVariable Long id) {
         List<Long> parts = partService.getPartsByCategoryId(id);
-        if (parts == null || parts.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
         return ResponseEntity.ok(parts);
     }
 }

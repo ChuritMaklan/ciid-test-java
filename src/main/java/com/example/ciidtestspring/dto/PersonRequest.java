@@ -5,15 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class PersonRequest {
     private long id;
     private String name;
-
     private String email;
-
     private String phone;
-
     private long typeId;
 }

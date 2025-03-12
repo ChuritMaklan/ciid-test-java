@@ -1,5 +1,6 @@
 package com.example.ciidtestspring.service;
 
+import com.example.ciidtestspring.PersonTypeEnum;
 import com.example.ciidtestspring.dto.PartRequest;
 import com.example.ciidtestspring.entity.Part;
 import com.example.ciidtestspring.entity.Category;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,25 +20,49 @@ import java.util.stream.Collectors;
 
 @Service
 public class PartService {
-    @Autowired
-    private PartRepository partRepository;
-    @Autowired
-    private PersonRepository personRepository;
-    @Autowired
-    private PersonTypeService personTypeService;
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final PartRepository partRepository;
+    private final PersonRepository personRepository;
+    private final PersonTypeService personTypeService;
+    private final CategoryRepository categoryRepository;
 
-    public List<Part> getAllParts() {
-        return partRepository.findAll();
+    public PartService(PartRepository partRepository, PersonRepository personRepository, PersonTypeService personTypeService, CategoryRepository categoryRepository) {
+        this.partRepository = partRepository;
+        this.personRepository = personRepository;
+        this.personTypeService = personTypeService;
+        this.categoryRepository = categoryRepository;
     }
 
-    public Part getPartById(Long id) {
-        return partRepository.findById(id).orElseThrow(() -> new RuntimeException("Part not found"));
+    public List<PartRequest> getAllParts() {
+
+        List<Part> parts = partRepository.findAll();
+        List<PartRequest> partRequests = new ArrayList<>();
+        for(Part part: parts){
+            partRequests.add(partToPartRequest(part));
+        }
+        return partRequests;
+    }
+
+    public PartRequest getPartById(Long id) {
+        Part part =  partRepository.findById(id).orElseThrow(() -> new RuntimeException("Part not found"));
+        return partToPartRequest(part);
+    }
+    private PartRequest partToPartRequest(Part part){
+        PartRequest partRequest = new PartRequest();
+
+        partRequest.setId(part.getId());
+        partRequest.setName(part.getName());
+        partRequest.setDescription(part.getDescription());
+        partRequest.setPrice(part.getPrice());
+        partRequest.setQuantityInStock(part.getQuantityInStock());
+        partRequest.setPersonId(part.getPerson().getId());
+        partRequest.setCategoryIds(part.getCategories().stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet()));
+        return partRequest;
     }
     @Transactional
     public Part createPart(PartRequest partRequest) {
-        if (personTypeService.checkIfSupplier(partRequest.getPersonId())){
+        if (partRequest.getPersonId() == PersonTypeEnum.SUPPLIER.getId()){
             return null;
         }
         Part part = new Part();
@@ -61,11 +87,11 @@ public class PartService {
         return partRepository.save(part);
     }
 
-    public Part updatePart(Long id, PartRequest updatedPart) {
-        if (personTypeService.checkIfSupplier(updatedPart.getPersonId())){
+    public Part updatePart(PartRequest updatedPart) {
+        if (updatedPart.getPersonId() == PersonTypeEnum.SUPPLIER.getId()){
             return null;
         }
-        Part part = partRepository.findById(id).orElseThrow(() -> new RuntimeException("Part not found"));
+        Part part = partRepository.findById(updatedPart.getId()).orElseThrow(() -> new RuntimeException("Part not found"));
         part.setName(updatedPart.getName());
         part.setPrice(updatedPart.getPrice());
         part.setQuantityInStock(updatedPart.getQuantityInStock());
