@@ -11,7 +11,7 @@ Estimated time: 10 <br>
 Real time: 14 <br>
 Task 4 <br>
 Estimated time: 10 <br>
-Real time: 8 <br>
+Real time: 10<br>
 Task 5 <br>
 Estimated time: 8 <br>
 Real time: 10 <br>
