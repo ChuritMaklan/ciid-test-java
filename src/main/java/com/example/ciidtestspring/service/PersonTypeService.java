@@ -36,7 +36,9 @@ public class PersonTypeService {
         return personTypeRequest;
     }
 
-    public PersonType createPersonType(PersonType personType) {
+    public PersonType createPersonType(PersonTypeRequest personTypeRequest) {
+        PersonType personType = new PersonType();
+        personType.setTypeName(personTypeRequest.getTypeName());
         return personTypeRepository.save(personType);
     }
 

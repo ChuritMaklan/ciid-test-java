@@ -29,28 +29,18 @@ public class CategoryController {
 
     @GetMapping
     public List<CategoryRequest> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
-        List<CategoryRequest> categoryRequests = new ArrayList<>();
-        for(Category category: categories){
-            categoryRequests.add(categoryToCategoryRequest(category));
-        }
-        return categoryRequests;
+        return categoryService.getAllCategories();
     }
 
     @GetMapping("/{id}")
     public CategoryRequest getCategoryById(@PathVariable Long id) {
-        return categoryToCategoryRequest(categoryService.getCategoryById(id));
-    }
-    private CategoryRequest categoryToCategoryRequest(Category category){
-        CategoryRequest categoryRequest = new CategoryRequest();
-        categoryRequest.setId(category.getId());
-        categoryRequest.setName(category.getName());
-        return categoryRequest;
+        return categoryService.getCategoryById(id);
     }
 
+
     @PostMapping()
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category createdCategory = categoryService.createCategory(category);
+    public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest) {
+        Category createdCategory = categoryService.createCategory(categoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
 

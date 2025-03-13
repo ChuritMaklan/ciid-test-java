@@ -28,8 +28,8 @@ public class PersonTypeController {
     }
 
     @PostMapping
-    public PersonType createPersonType(@RequestBody PersonType personType) {
-        return personTypeService.createPersonType(personType);
+    public PersonType createPersonType(@RequestBody PersonTypeRequest personTypeRequest) {
+        return personTypeService.createPersonType(personTypeRequest);
     }
 
     @PutMapping("/{id}")

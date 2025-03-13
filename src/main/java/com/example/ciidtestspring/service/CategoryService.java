@@ -6,6 +6,7 @@ import com.example.ciidtestspring.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,17 +16,30 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryRequest> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryRequest> categoryRequests = new ArrayList<>();
+        for(Category category: categories){
+            categoryRequests.add(categoryToCategoryRequest(category));
+        }
+        return categoryRequests;
     }
 
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+    public CategoryRequest getCategoryById(Long id) {
+        return categoryToCategoryRequest(categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found")));
     }
 
 
-    public Category createCategory(Category category) {
+    public Category createCategory(CategoryRequest categoryRequest) {
+        Category category = new Category();
+        category.setName(categoryRequest.getName());
         return categoryRepository.save(category);
+    }
+    private CategoryRequest categoryToCategoryRequest(Category category){
+        CategoryRequest categoryRequest = new CategoryRequest();
+        categoryRequest.setId(category.getId());
+        categoryRequest.setName(category.getName());
+        return categoryRequest;
     }
 
     public Category updateCategory(CategoryRequest updatedCategory) {
