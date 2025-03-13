@@ -1,0 +1,113 @@
+<div class="container">
+  <h1 class="title">Parts</h1>
+  <p *ngIf="!parts || parts.length === 0">No parts found.</p>
+  <p *ngIf="!persons || persons.length === 0">No persons found.</p>
+  <p *ngIf="!categories || categories.length === 0">No categories found.</p>
+
+  <form (submit)="handleAddPart(); $event.preventDefault()" class="form">
+    <label>
+      Part Name:
+      <input
+        type="text"
+        [(ngModel)]="name"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="Enter part name"
+        class="input"
+        required
+      />
+    </label>
+
+    <label>
+      Price:
+      <input
+        type="number"
+        [(ngModel)]="price"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="Enter price"
+        class="input"
+        required
+      />
+    </label>
+
+    <label>
+      Quantity in Stock:
+      <input
+        type="number"
+        [(ngModel)]="quantity"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="Enter quantity"
+        class="input"
+        required
+      />
+    </label>
+
+    <label>
+      Description:
+      <input
+        type="text"
+        [(ngModel)]="description"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="Enter description"
+        class="input"
+        required
+      />
+    </label>
+
+    <label>
+      Select Person:
+      <select
+        [(ngModel)]="personId"
+        [ngModelOptions]="{ standalone: true }"
+        class="select"
+        required
+      >
+        <option value="" disabled>Select a person</option>
+        <option *ngFor="let person of persons" [value]="person.id">
+          {{ person.name }}
+        </option>
+      </select>
+    </label>
+
+    <label>
+      Select Categories (Hold Ctrl to select multiple):
+      <select
+        multiple
+        [(ngModel)]="categoryIds"
+        [ngModelOptions]="{ standalone: true }"
+        (change)="handleCategoryChange($event)"
+        class="select"
+        required
+      >
+        <option value="" disabled>Select categories</option>
+        <option
+          *ngFor="let category of categories"
+          [value]="category.id"
+          [selected]="categoryIds.includes(category.id)"
+        >
+          {{ category.name }}
+        </option>
+      </select>
+    </label>
+
+    <button type="submit" class="button">Add Part</button>
+  </form>
+
+  <ul class="list">
+    <li *ngFor="let part of parts" class="listItem">
+      <div>
+        <strong>{{ part.name }}</strong> (${{ part.price }}) -
+        {{ part.quantityInStock }} in stock
+      </div>
+      <div>
+        <button
+          (click)="handleDeletePart(part.id)"
+          class="button"
+          style="background-color: #dc3545; margin-right: 10px;"
+        >
+          Delete
+        </button>
+        <button (click)="handleUpdatePart(part)" class="button">Update</button>
+      </div>
+    </li>
+  </ul>
+</div>

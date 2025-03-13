@@ -1,0 +1,37 @@
+<div class="container">
+    <h1 class="title">Update Person</h1>
+    <form (submit)="handleSubmit(); $event.preventDefault()" class="form">
+      <!-- Name Field -->
+      <label>
+        Name:
+        <input type="text" [(ngModel)]="person.name" [ngModelOptions]="{standalone: true}" placeholder="Enter name" class="input" required />
+      </label>
+  
+      <!-- Email Field -->
+      <label>
+        Email:
+        <input type="email" [(ngModel)]="person.email" [ngModelOptions]="{standalone: true}" placeholder="Enter email" class="input" required />
+      </label>
+  
+      <!-- Phone Field -->
+      <label>
+        Phone:
+        <input type="tel" [(ngModel)]="person.phone" [ngModelOptions]="{standalone: true}" placeholder="Enter phone number" class="input" required />
+      </label>
+  
+      <!-- Person Type Dropdown -->
+      <label>
+        Person Type:
+        <select [(ngModel)]="person.typeId" [ngModelOptions]="{standalone: true}" class="input" required>
+          <option value="" disabled>Select a type</option>
+          <option *ngFor="let type of personTypes" [value]="type.id">
+            {{ type.typeName }}
+          </option>
+        </select>
+      </label>
+  
+      <!-- Submit Button -->
+      <button type="submit" class="button">Update Person</button>
+    </form>
+  </div>
+  

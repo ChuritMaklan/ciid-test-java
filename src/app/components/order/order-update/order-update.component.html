@@ -1,0 +1,46 @@
+<div class="container">
+    <h1 class="title">Update Order</h1>
+    <form (submit)="handleSubmit()" class="form">
+      <label>
+        Select Person:
+        <select [(ngModel)]="order.personId" [ngModelOptions]="{standalone: true}" class="select" required>
+          <option value="" disabled>Select Person</option>
+          <option *ngFor="let person of persons" [value]="person.id">{{ person.name }}</option>
+        </select>
+      </label>
+  
+      <label>
+        Order Date:
+        <input type="date" [(ngModel)]="order.orderDate" [ngModelOptions]="{standalone: true}" class="input" required />
+      </label>
+  
+      <label>
+        Select Part:
+        <select (change)="handleAddPart($event)" class="select">
+          <option value="" disabled>Select Part</option>
+          <option *ngFor="let part of parts" [value]="part.id">{{ part.name }}</option>
+        </select>
+      </label>
+  
+      <h3>Selected Parts</h3>
+      <div *ngFor="let item of order.orderItems" class="listItem">
+        <label>
+          {{ getPartName(item.partId) }}:
+          <input
+            type="number"
+            [(ngModel)]="item.quantity"
+            [ngModelOptions]="{standalone: true}"
+            min="1"
+            class="input"
+            required
+          />
+        </label>
+        <button type="button" (click)="handleRemovePart(item.partId)" class="button" style="background-color: #dc3545;">
+          Remove
+        </button>
+      </div>
+  
+      <button type="submit" class="button">Update Order</button>
+    </form>
+  </div>
+  

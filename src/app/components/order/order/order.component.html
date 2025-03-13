@@ -1,0 +1,92 @@
+<div class="container">
+  <h1 class="title">Orders</h1>
+  <form (submit)="handleAddOrder(); $event.preventDefault()" class="form">
+    <label>
+      Select Person:
+      <select
+        [(ngModel)]="personId"
+        [ngModelOptions]="{ standalone: true }"
+        class="select"
+        required
+      >
+        <option value="" disabled>Select Person</option>
+        <option *ngFor="let person of persons" [value]="person.id">
+          {{ person.name }} ({{ person.email }})
+        </option>
+      </select>
+    </label>
+
+    <label>
+      Order Date:
+      <input
+        type="date"
+        [(ngModel)]="orderDate"
+        [ngModelOptions]="{ standalone: true }"
+        class="input"
+        required
+      />
+    </label>
+
+    <label>
+      Select Part:
+      <select (change)="handleAddPart($any($event.target).value)" class="select">
+        <option value="" disabled>Select Part</option>
+        <option *ngFor="let part of parts" [value]="part.id">
+          {{ part.name }}
+        </option>
+      </select>
+    </label>
+
+    <h3>Selected Parts</h3>
+    <div *ngFor="let item of selectedParts; let i = index" class="listItem">
+      <label>
+        {{ partMap[item.partId] || 'Unknown Part' }}:
+        <input
+          type="number"
+          [(ngModel)]="item.quantity"
+          [ngModelOptions]="{ standalone: true }"
+          #input
+          (change)="handleQuantityChange(item.partId, parseInputValue(input.value))"
+          min="1"
+          class="input"
+          required
+        />
+      </label>
+      <button
+        type="button"
+        (click)="removePart(i)"
+        class="button"
+        style="background-color: #dc3545;"
+      >
+        Remove
+      </button>
+    </div>
+
+    <button type="submit" class="button">Add Order</button>
+  </form>
+
+  <!-- Output selectedParts array for debugging -->
+  <h3>Selected Parts Array</h3>
+  <pre>{{ selectedParts | json }}</pre>
+
+  <h3>Existing Orders</h3>
+  <ul class="list">
+    <li *ngFor="let order of orders" class="listItem">
+      <div>
+        <strong>Order ID:</strong> {{ order.id }} <br />
+        <strong>Person:</strong> {{ personMap[order.personId] }} <br />
+        <strong>Date:</strong> {{ formatDate(order.orderDate.toString()) }}
+      </div>
+      <div>
+        <button
+          (click)="handleDeleteOrder(order.id)"
+          class="button"
+          style="background-color: #dc3545; margin-right: 10px;"
+        >
+          Delete
+        </button>
+        <button (click)="handleUpdateOrder(order)" class="button">Update</button>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,10 @@
+<div class="container">
+    <h1 class="title">Update Category</h1>
+    <form (submit)="handleSubmit(); $event.preventDefault()" class="form">
+      <label>
+        Category Name:
+        <input type="text" [(ngModel)]="category.name" [ngModelOptions]="{standalone: true}" placeholder="Enter category name" class="input" required />
+      </label>
+      <button type="submit" class="button">Update Category</button>
+    </form>
+  </div>

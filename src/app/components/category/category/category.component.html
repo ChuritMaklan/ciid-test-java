@@ -1,0 +1,19 @@
+<div class="container">
+    <h1 class="title">Categories</h1>
+    <form (submit)="handleAddCategory(); $event.preventDefault()" class="form">
+      <label>
+        Category Name:
+        <input type="text" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" placeholder="Enter category name" class="input" required />
+      </label>
+      <button type="submit" class="button">Add Category</button>
+    </form>
+    <ul class="list">
+      <li *ngFor="let category of categories" class="listItem">
+        <strong>{{ category.name }}</strong>
+        <div>
+          <button (click)="handleDeleteCategory(category.id)" class="button" style="background-color: #dc3545; margin-right: 10px;">Delete</button>
+          <button (click)="handleUpdateCategory(category)" class="button">Update</button>
+        </div>
+      </li>
+    </ul>   
+  </div>

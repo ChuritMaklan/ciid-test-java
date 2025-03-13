@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import {NavbarComponent} from './components/navbar/navbar.component';
+ // Import RouterModule
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  template: `<app-navbar></app-navbar><router-outlet></router-outlet>`,
+  imports: [RouterModule, NavbarComponent] // Add RouterModule to imports
 })
-export class AppComponent {
-  title = 'angularFront';
-}
+export class AppComponent {}

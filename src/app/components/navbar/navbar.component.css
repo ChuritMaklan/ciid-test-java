@@ -1,0 +1,30 @@
+.navbar {
+    background-color: #007bff;
+    padding: 10px;
+  }
+  
+  .nav-list {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-list li {
+    display: inline;
+  }
+  
+  .nav-list a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-list a:hover {
+    background-color: #0056b3;
+  }
+  
+  .nav-list .active {
+    background-color: #0056b3;
+  }

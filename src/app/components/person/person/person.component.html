@@ -1,0 +1,42 @@
+<div class="container">
+    <h1 class="title">Persons</h1>
+    <form (submit)="handleAddPerson(); $event.preventDefault()" class="form">
+      <label>
+        Name:
+        <input type="text" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" placeholder="Enter name" class="input" required />
+      </label>
+  
+      <label>
+        Email:
+        <input type="email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}"placeholder="Enter email" class="input" required />
+      </label>
+  
+      <label>
+        Phone:
+        <input type="text" [(ngModel)]="phone" [ngModelOptions]="{standalone: true}"placeholder="Enter phone" class="input" required />
+      </label>
+  
+      <label>
+        Select Person Type:
+        <select [(ngModel)]="typeId" [ngModelOptions]="{standalone: true}" class="select" required>
+          <option value="" disabled>Select Person Type</option>
+          <option *ngFor="let type of personTypes" [value]="type.id">{{ type.typeName }}</option>
+        </select>
+      </label>
+  
+      <button type="submit" class="button">Add Person</button>
+    </form>
+    <ul class="list">
+      <li *ngFor="let person of persons" class="listItem">
+        <div>
+          <strong>{{ person.name }}</strong> ({{ person.email }}) <br />
+          Phone: {{ person.phone }} <br />
+          Type: {{ getTypeName(person.typeId) }}
+        </div>
+        <div>
+          <button (click)="handleDeletePerson(person.id)" class="button" style="background-color: #dc3545; margin-right: 10px;">Delete</button>
+          <button (click)="handleUpdatePerson(person)" class="button">Update</button>
+        </div>
+      </li>
+    </ul>
+  </div>

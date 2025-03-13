@@ -1,0 +1,21 @@
+  <div class="container">
+      <h1 class="title">Person Types</h1>
+      <form (submit)="handleAddType(); $event.preventDefault()" class="form">
+        <label>
+          Type Name:
+          <input type="text" [(ngModel)]="typeName" [ngModelOptions]="{standalone: true}" placeholder="Enter type name" class="input" required />
+        </label>
+        <button type="submit" class="button">Add Type</button>
+      </form>
+      <ul class="list">
+        <li *ngFor="let type of types" class="listItem">
+          <div>
+            <strong>{{ type.typeName }}</strong>
+          </div>
+          <div>
+            <button (click)="handleDeleteType(type.id)" class="button" style="background-color: #dc3545; margin-right: 10px;">Delete</button>
+            <button (click)="handleUpdatePersonType(type)" class="button">Update</button>
+          </div>
+        </li>
+      </ul>
+    </div>
