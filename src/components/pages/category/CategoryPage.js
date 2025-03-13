@@ -27,7 +27,7 @@ const CategoryPage = () => {
     }
     try {
       await addCategory({ name });
-      fetchCategories();
+      await fetchCategories();
       setName("");
     } catch (error) {
       console.error("Error adding category:", error);
@@ -37,7 +37,7 @@ const CategoryPage = () => {
   const handleDeleteCategory = async (id) => {
     try {
       await deleteCategory(id);
-      fetchCategories();
+      await fetchCategories();
     } catch (error) {
       console.error("Error deleting category:", error);
     }

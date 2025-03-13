@@ -7,4 +7,18 @@ const api = axios.create({
   },
 });
 
-export default api;
+const methodCall = async (method, subURL, data = null) => {
+  const response = await api({
+    method,
+    url: subURL,
+    data,
+  });
+  return response.data;
+};
+
+// Export methods as named exports
+export const getItems = (subURL) => methodCall("get", subURL);
+export const addItem = (subURL, item) => methodCall("post", subURL, item);
+export const deleteItem = (subURL, id) => methodCall("delete", `${subURL}/${id}`);
+export const updateItem = (subURL, item) => methodCall("put", `${subURL}/${item.id}`, item);
+export const getItemById = (subURL, id) => methodCall("get", `${subURL}/${id}`);

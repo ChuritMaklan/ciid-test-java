@@ -41,7 +41,7 @@ const PersonPage = () => {
     }
     try {
       await addPerson({ name, email, phone, typeId });
-      fetchPersons();
+      await fetchPersons();
       setName("");
       setEmail("");
       setPhone("");
@@ -54,7 +54,7 @@ const PersonPage = () => {
   const handleDeletePerson = async (id) => {
     try {
       await deletePerson(id);
-      fetchPersons();
+      await fetchPersons();
     } catch (error) {
       console.error("Error deleting person:", error);
     }

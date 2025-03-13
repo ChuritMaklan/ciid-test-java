@@ -1,27 +1,7 @@
-import api from "./Api";
+import { getItems, getItemById, addItem, deleteItem, updateItem } from "./Api";
 
-const getParts = async () => {
-  const response = await api.get("/parts");
-  return response.data;
-};
-
-const addPart = async (part) => {
-  const response = await api.post("/parts", part);
-  return response.data;
-};
-
-const deletePart = async (id) => {
-  const response = await api.delete(`/parts/${id}`);
-  return response.data;
-};
-const updatePart = async (part) =>{
-  const responce = await api.put(`/parts/${part.id}`, part);
-  return responce.data;
-}
-
-const getPartById = async(id) =>{
-  const responce = await api.get(`/parts/${id}`);
-  return responce.data;
-}
-
-export { getParts, addPart, deletePart, updatePart, getPartById };
+export const getParts = () => getItems("/parts");
+export const addPart = (part) => addItem("/parts", part);
+export const deletePart = (id) => deleteItem("/parts", id);
+export const updatePart = (part) => updateItem("/parts", part);
+export const getPartById = (id) => getItemById("/parts", id);

@@ -59,7 +59,7 @@ const OrderPage = () => {
         })),
       };
       await addOrder(orderRequest);
-      fetchOrders();
+      await fetchOrders();
       setPersonId("");
       setOrderDate("");
       setSelectedParts([]);
@@ -71,7 +71,7 @@ const OrderPage = () => {
   const handleDeleteOrder = async (id) => {
     try {
       await deleteOrder(id);
-      fetchOrders();
+      await fetchOrders();
     } catch (error) {
       console.error("Error deleting order:", error);
     }

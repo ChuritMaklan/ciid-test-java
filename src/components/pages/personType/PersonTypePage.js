@@ -27,7 +27,7 @@ const PersonTypePage = () => {
     }
     try {
       await addPersonType(typeName);
-      fetchTypes();
+      await fetchTypes();
       setTypeName("");
     } catch (error) {
       console.error("Error adding person type:", error);
@@ -37,7 +37,7 @@ const PersonTypePage = () => {
   const handleDeleteType = async (id) => {
     try {
       await deletePersonType(id);
-      fetchTypes();
+      await fetchTypes();
     } catch (error) {
       console.error("Error deleting person type:", error);
     }

@@ -61,7 +61,7 @@ const PartsPage = () => {
         personId,
         categoryIds,
       });
-      fetchParts();
+      await fetchParts();
       setName("");
       setPrice("");
       setQuantity("");
@@ -76,7 +76,7 @@ const PartsPage = () => {
   const handleDeletePart = async (id) => {
     try {
       await deletePart(id);
-      fetchParts();
+      await fetchParts();
     } catch (error) {
       console.error("Error deleting part:", error);
     }
