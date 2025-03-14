@@ -31,7 +31,7 @@
   
       <label>
         Select Categories (Hold Ctrl to select multiple):
-        <select multiple [(ngModel)]="part.categoryIds" [ngModelOptions]="{standalone: true}" (change)="handleCategoryChange($event)" class="select" required>
+        <select multiple [(ngModel)]="part.categoryIds" [ngModelOptions]="{standalone: true}" class="select" required>
           <option value="" disabled>Select categories</option>
           <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
         </select>

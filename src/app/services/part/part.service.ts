@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Part } from '../../models/part';
+import {BasicService} from '../basic/basic.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PartService {
-  private apiUrl = 'http://localhost:8080/parts';
+export class PartService{
+  private subUrl = '/parts';
 
-  constructor(private http: HttpClient) {}
+  constructor(private basicService: BasicService) {}
 
-  getParts(): Observable<Part[]> {
-    return this.http.get<Part[]>(this.apiUrl);
+  getParts(){
+    return this.basicService.getData(this.subUrl);
   }
 
   addPart(part: Part): Observable<Part> {
-    return this.http.post<Part>(this.apiUrl, part);
+    return this.basicService.addData(this.subUrl, part);
   }
 
   updatePart(part: Part): Observable<Part> {
-    return this.http.put<Part>(`${this.apiUrl}/${part.id}`, part);
+    return this.basicService.updateData(this.subUrl, part.id, part);
   }
 
   deletePart(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.basicService.deleteData(this.subUrl, id);
   }
 }

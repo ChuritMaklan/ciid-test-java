@@ -16,11 +16,13 @@
   
       <label>
         Select Part:
-        <select (change)="handleAddPart($event)" class="select">
+        <select (change)="handleAddPart($any($event.target).value)" class="select">
           <option value="" disabled>Select Part</option>
           <option *ngFor="let part of parts" [value]="part.id">{{ part.name }}</option>
         </select>
       </label>
+      
+      
   
       <h3>Selected Parts</h3>
       <div *ngFor="let item of order.orderItems" class="listItem">

@@ -25,8 +25,11 @@ export class CategoryComponent implements OnInit {
   }
 
   fetchCategories() {
-    this.categoryService.getCategories().subscribe((data) => {
-      this.categories = data;
+    this.categoryService.getCategories().subscribe({
+      next: (data) => (this.categories= data),
+      error: (err) =>{
+        console.error('Error while fetching categories', err);
+      },
     });
   }
 

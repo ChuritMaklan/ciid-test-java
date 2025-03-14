@@ -40,14 +40,20 @@ export class OrderUpdateComponent implements OnInit {
   }
 
   fetchPersons() {
-    this.personService.getPersons().subscribe((data) => {
-      this.persons = data;
+    this.personService.getPersons().subscribe({
+      next: (data) => (this.persons= data),
+      error: (err) =>{
+        console.error('Error while fetching persons', err);
+      },
     });
   }
 
   fetchParts() {
-    this.partService.getParts().subscribe((data) => {
-      this.parts = data;
+    this.partService.getParts().subscribe({
+      next: (data) => (this.parts= data),
+      error: (err) =>{
+        console.error('Error while fetching parts', err);
+      },
     });
   }
 
@@ -59,13 +65,11 @@ export class OrderUpdateComponent implements OnInit {
     this.order.handleRemovePart(partId);
   }
 
-  handleAddPart(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const partId = target.value;
-    if (partId) {
-      this.order.handleAddPart(parseInt(partId, 10), 1); // Add part with quantity 1
+    handleAddPart(partId: string) {
+      if (partId) {
+        this.order.handleAddPart(parseInt(partId, 10), 1);
+      }
     }
-  }
 
   getPartName(partId: number): string {
     if (!this.parts || !partId) return 'Unknown Part';

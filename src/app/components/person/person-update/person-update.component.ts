@@ -33,8 +33,11 @@ export class PersonUpdateComponent implements OnInit {
   }
 
   fetchPersonTypes() {
-    this.personTypeService.getPersonTypes().subscribe((data) => {
-      this.personTypes = data;
+    this.personTypeService.getPersonTypes().subscribe({
+      next: (data) => (this.personTypes= data),
+      error: (err) =>{
+        console.error('Error while fetching personTypes', err);
+      },
     });
   }
 

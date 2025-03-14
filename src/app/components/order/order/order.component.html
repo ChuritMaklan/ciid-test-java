@@ -64,11 +64,6 @@
 
     <button type="submit" class="button">Add Order</button>
   </form>
-
-  <!-- Output selectedParts array for debugging -->
-  <h3>Selected Parts Array</h3>
-  <pre>{{ selectedParts | json }}</pre>
-
   <h3>Existing Orders</h3>
   <ul class="list">
     <li *ngFor="let order of orders" class="listItem">

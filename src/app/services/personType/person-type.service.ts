@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PersonType } from '../../models/person-type';
+import {BasicService} from '../basic/basic.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonTypeService {
-  private apiUrl = 'http://localhost:8080/person-types';
+export class PersonTypeService{
+  private subUrl = '/person-types';
 
-  constructor(private http: HttpClient) {}
+  constructor(private basicService: BasicService) {}
 
-  getPersonTypes(): Observable<PersonType[]> {
-    return this.http.get<PersonType[]>(this.apiUrl);
+  getPersonTypes(){
+    return this.basicService.getData(this.subUrl);
   }
 
   addPersonType(personType: PersonType): Observable<PersonType> {
-    return this.http.post<PersonType>(this.apiUrl, personType);
+    return this.basicService.addData(this.subUrl, personType);
   }
 
   updatePersonType(personType: PersonType): Observable<PersonType> {
-    return this.http.put<PersonType>(`${this.apiUrl}/${personType.id}`, personType);
+    return this.basicService.updateData(this.subUrl, personType.id, personType);
   }
 
   deletePersonType(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.basicService.deleteData(this.subUrl, id);
   }
 }

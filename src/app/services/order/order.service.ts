@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Order } from '../../models/order';
+import {BasicService} from '../basic/basic.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
-  private apiUrl = 'http://localhost:8080/orders';
+export class OrderService{
+  private subUrl = '/orders';
 
-  constructor(private http: HttpClient) {}
+  constructor(private basicService: BasicService) {}
 
-  getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl);
+  getOrders(){
+    return this.basicService.getData(this.subUrl);
   }
 
   addOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(this.apiUrl, order);
+    return this.basicService.addData(this.subUrl, order);
   }
 
   updateOrder(order: Order): Observable<Order> {
-    return this.http.put<Order>(`${this.apiUrl}/${order.id}`, order);
+    return this.basicService.updateData(this.subUrl, order.id, order);
   }
 
   deleteOrder(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.basicService.deleteData(this.subUrl, id);
   }
 }

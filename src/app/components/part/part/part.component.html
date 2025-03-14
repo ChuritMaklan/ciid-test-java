@@ -1,9 +1,5 @@
 <div class="container">
   <h1 class="title">Parts</h1>
-  <p *ngIf="!parts || parts.length === 0">No parts found.</p>
-  <p *ngIf="!persons || persons.length === 0">No persons found.</p>
-  <p *ngIf="!categories || categories.length === 0">No categories found.</p>
-
   <form (submit)="handleAddPart(); $event.preventDefault()" class="form">
     <label>
       Part Name:
@@ -74,7 +70,6 @@
         multiple
         [(ngModel)]="categoryIds"
         [ngModelOptions]="{ standalone: true }"
-        (change)="handleCategoryChange($event)"
         class="select"
         required
       >

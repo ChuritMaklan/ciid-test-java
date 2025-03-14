@@ -40,27 +40,34 @@ export class OrderComponent implements OnInit {
     this.fetchParts();
   }
 
-  fetchOrders() {
-    this.orderService.getOrders().subscribe((data) => {
-      this.orders = data;
-    });
+  fetchOrders() {this.orderService.getOrders().subscribe({
+    next: (data) => (this.orders= data),
+    error: (err) =>{
+      console.error('Error while fetching orders', err);
+    },
+  });  
   }
 
   fetchPersons() {
-    this.personService.getPersons().subscribe((data) => {
-      this.persons = data;
-      this.persons.forEach((person) => {
-        this.personMap[person.id] = person.name;
-      });
+    this.personService.getPersons().subscribe({
+      next: (data) => (this.persons= data),
+      error: (err) =>{
+        console.error('Error while fetching persons', err);
+      },
     });
   }
 
   fetchParts() {
-    this.partService.getParts().subscribe((data) => {
-      this.parts = data;
-      this.parts.forEach((part) => {
-        this.partMap[part.id] = part.name;
-      });
+    this.partService.getParts().subscribe({
+      next: (data) => {
+        this.parts= data;
+        this.parts.forEach((part) => {
+          this.partMap[part.id] = part.name;
+        });
+      },
+      error: (err) =>{
+        console.error('Error while fetching parts', err);
+      },
     });
   }
 

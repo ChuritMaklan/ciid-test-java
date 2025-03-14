@@ -34,19 +34,25 @@ export class PersonComponent implements OnInit {
   }
 
   fetchPersons() {
-    this.personService.getPersons().subscribe((data) => {
-      this.persons = data;
+    this.personService.getPersons().subscribe({
+      next: (data) => (this.persons= data),
+      error: (err) =>{
+        console.error('Error while fetching persons', err);
+      },
+    });
+  }
+
+  fetchPersonTypes() {
+    this.personTypeService.getPersonTypes().subscribe({
+      next: (data) => (this.personTypes= data),
+      error: (err) =>{
+        console.error('Error while fetching personTypes', err);
+      },
     });
   }
   getTypeName(typeId: number): string {
     const type = this.personTypes.find(type => type.id === typeId);
     return type ? type.typeName : 'N/A'; // Return 'N/A' if type is not found
-  }
-
-  fetchPersonTypes() {
-    this.personTypeService.getPersonTypes().subscribe((data) => {
-      this.personTypes = data;
-    });
   }
 
   handleAddPerson() {

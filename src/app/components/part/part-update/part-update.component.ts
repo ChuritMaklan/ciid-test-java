@@ -39,36 +39,21 @@ export class UpdatePartComponent implements OnInit {
   }
 
   fetchPersons() {
-    this.personService.getPersons().subscribe((data) => {
-      this.persons = data;
+    this.personService.getPersons().subscribe({
+      next: (data) => (this.persons= data),
+      error: (err) =>{
+        console.error('Error while fetching persons', err);
+      },
     });
   }
 
   fetchCategories() {
-    this.categoryService.getCategories().subscribe((data) => {
-      this.categories = data;
+    this.categoryService.getCategories().subscribe({
+      next: (data) => (this.categories= data),
+      error: (err) =>{
+        console.error('Error while fetching categories', err);
+      },
     });
-  }
-
-  handleCategoryChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedOptions = Array.from(selectElement.selectedOptions);
-    console.log('Selected Options:', selectedOptions);
-  
-    // Extract IDs from values like '1 : 3'
-    const selectedIds = selectedOptions
-      .map((option) => {
-        const valueParts = option.value.split(': '); 
-        console.log("valuepart" + valueParts);
-        const idPart = valueParts[valueParts.length - 1].trim();
-        console.log(idPart); 
-        const id = Number(idPart);
-        return isNaN(id) ? null : id; 
-      })
-      .filter((id) => id !== null) as number[];
-  
-    console.log('Selected IDs:', selectedIds);
-    this.part.categoryIds = selectedIds;
   }
 
   handleSubmit() {

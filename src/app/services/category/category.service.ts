@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../../models/category';
+import {BasicService} from '../basic/basic.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
-  private apiUrl = 'http://localhost:8080/categories';
+export class CategoryService{
+  private subUrl = '/categories';
 
-  constructor(private http: HttpClient) {}
+  constructor(private basicService: BasicService) {}
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiUrl);
+  getCategories(){
+    return this.basicService.getData(this.subUrl);
   }
 
   addCategory(category: Category): Observable<Category> {
-    return this.http.post<Category>(this.apiUrl, category);
+    return this.basicService.addData(this.subUrl, category);
   }
 
   updateCategory(category: Category): Observable<Category> {
-    return this.http.put<Category>(`${this.apiUrl}/${category.id}`, category);
+    return this.basicService.updateData(this.subUrl, category.id, category);
   }
 
   deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.basicService.deleteData(this.subUrl, id);
   }
 }

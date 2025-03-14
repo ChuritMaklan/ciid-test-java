@@ -23,8 +23,11 @@ export class PersonTypeComponent implements OnInit {
   }
 
   fetchTypes() {
-    this.personTypeService.getPersonTypes().subscribe((data) => {
-      this.types = data;
+    this.personTypeService.getPersonTypes().subscribe({
+      next: (data) => (this.types= data),
+      error: (err) =>{
+        console.error('Error while fetching personTypes', err);
+      },
     });
   }
 

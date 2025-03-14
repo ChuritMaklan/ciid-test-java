@@ -41,21 +41,29 @@ export class PartComponent implements OnInit {
   }
 
   fetchParts() {
-    this.partService.getParts().subscribe((data) => {
-      this.parts = data;
+    this.partService.getParts().subscribe({
+      next: (data) => (this.parts= data),
+      error: (err) =>{
+        console.error('Error while fetching parts', err);
+      },
     });
   }
 
   fetchPersons() {
-    this.personService.getPersons().subscribe((data) => {
-      this.persons = data;
+    this.personService.getPersons().subscribe({
+      next: (data) => (this.persons= data),
+      error: (err) =>{
+        console.error('Error while fetching persons', err);
+      },
     });
   }
 
   fetchCategories() {
-    this.categoryService.getCategories().subscribe((data) => {
-      this.categories = data;
-      console.log('Categories:', this.categories); // Log categories
+    this.categoryService.getCategories().subscribe({
+      next: (data) => (this.categories= data),
+      error: (err) =>{
+        console.error('Error while fetching categories', err);
+      },
     });
   }
 
@@ -97,28 +105,6 @@ export class PartComponent implements OnInit {
       this.fetchParts();
     });
   }
-
-  handleCategoryChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedOptions = Array.from(selectElement.selectedOptions);
-    console.log('Selected Options:', selectedOptions);
-  
-    // Extract IDs from values like '1 : 3'
-    const selectedIds = selectedOptions
-      .map((option) => {
-        const valueParts = option.value.split(': '); 
-        console.log("valuepart" + valueParts);
-        const idPart = valueParts[valueParts.length - 1].trim();
-        console.log(idPart); 
-        const id = Number(idPart);
-        return isNaN(id) ? null : id; 
-      })
-      .filter((id) => id !== null) as number[];
-  
-    console.log('Selected IDs:', selectedIds);
-    this.categoryIds.push(...selectedIds);
-  }
-  
 
   resetForm() {
     this.name = '';
