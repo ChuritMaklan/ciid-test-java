@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080", // Base URL of your backend API
+  baseURL: "http://localhost:8080",
   headers: {
     "Content-Type": "application/json",
   },
@@ -13,10 +13,9 @@ const methodCall = async (method, subURL, data = null) => {
     url: subURL,
     data,
   });
-  return response.data;
+  return response. data;
 };
 
-// Export methods as named exports
 export const getItems = (subURL) => methodCall("get", subURL);
 export const addItem = (subURL, item) => methodCall("post", subURL, item);
 export const deleteItem = (subURL, id) => methodCall("delete", `${subURL}/${id}`);
